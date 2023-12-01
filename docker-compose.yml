@@ -1,0 +1,11 @@
+version: '3'
+services:
+  ncalayer:
+    build: .
+    ports:
+      - '5900:5900'
+    volumes:
+      - /mnt:/mnt
+      - /media:/media
+    privileged: true
+    restart: unless-stopped
