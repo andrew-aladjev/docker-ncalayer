@@ -11,7 +11,7 @@ const FILE_POLL_TIMEOUT = 10 * 1000; // 10 seconds.
 
 (async () => {
   const browser = await puppeteer.launch({
-    executablePath: '/usr/bin/chromium',
+    executablePath: '/usr/bin/google-chrome-stable',
     headless: false,
     args: [
       '--enable-features=UseOzonePlatform',

@@ -50,17 +50,11 @@ mako &
 ./install.expect "$NCA_LAYER_DIR" "$NCA_LAYER_SCRIPT"
 
 # Starting ncalayer.
-cd "$NCA_LAYER_HOME_DIR"
-java \
-  --module-path "/usr/lib/openjfx" \
-  --add-modules "javafx.controls" \
-  -Djava.security.manager=allow \
-  -jar "$NCA_LAYER_SCRIPT" \
-  &
+"${NCA_LAYER_HOME_DIR}/${NCA_LAYER_SCRIPT}" --run &
 tail -F -f -n +1 "$NCA_LAYER_LOG" &
 
-# Staring chromium.
-chromium \
+# Staring google chrome stable.
+google-chrome-stable \
   --enable-features="UseOzonePlatform" \
   --ozone-platform="wayland" \
   --disable-dev-shm-usage \
