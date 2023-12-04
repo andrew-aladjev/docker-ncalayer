@@ -14,6 +14,7 @@ export XDG_RUNTIME_DIR=~
 export XDG_SESSION_TYPE="wayland"
 export WAYLAND_DISPLAY="wayland-1"
 export DISPLAY=":0"
+export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF8"
 
 # Starting sway.
 WLR_BACKENDS="headless" \
