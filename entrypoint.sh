@@ -6,11 +6,11 @@ cd "$DIR"
 
 NCA_LAYER_ARCHIVE="ncalayer.zip"
 NCA_LAYER_DIR="ncalayer"
+NCA_LAYER_HOME_DIR=~/"NCALayer"
 NCA_LAYER_SCRIPT="ncalayer.sh"
-TEMP_DIR="/tmp/entrypoint"
-mkdir -p "$TEMP_DIR"
+NCA_LAYER_LOG=~/".config/NCALayer/ncalayer.log"
 
-export XDG_RUNTIME_DIR="$TEMP_DIR"
+export XDG_RUNTIME_DIR=~
 export XDG_SESSION_TYPE="wayland"
 export WAYLAND_DISPLAY="wayland-1"
 export DISPLAY=":0"
@@ -22,7 +22,7 @@ WLR_BACKENDS="headless" \
   sway -c "sway.conf" --unsupported-gpu &
 
 # Starting vnc server.
-wayvnc &
+wayvnc "0.0.0.0" &
 
 # Downloading ncalayer archive.
 yarn install
@@ -35,21 +35,32 @@ rm -rf "$NCA_LAYER_DIR"
 mkdir -p "$NCA_LAYER_DIR"
 unzip "$NCA_LAYER_ARCHIVE" -d "$NCA_LAYER_DIR"
 
-# Installing ncalayer.
-cd "$NCA_LAYER_DIR"
-chmod +x "$NCA_LAYER_SCRIPT"
-
 # Fixes and workarounds.
+chmod +x "${NCA_LAYER_DIR}/${NCA_LAYER_SCRIPT}"
 mkdir -p ~/.local/share/applications
 
+# Starting dbus.
 dbus-uuidgen --ensure
 export $(dbus-launch)
 
-"./${NCA_LAYER_SCRIPT}" --nogui || :
+# Starting mako.
+mako &
+
+# Installing ncalayer.
+./install.expect "$NCA_LAYER_DIR" "$NCA_LAYER_SCRIPT"
+
+# Starting ncalayer.
+cd "$NCA_LAYER_HOME_DIR"
+java \
+  --module-path "/usr/lib/openjfx" \
+  --add-modules "javafx.controls" \
+  -Djava.security.manager=allow \
+  -jar "$NCA_LAYER_SCRIPT" \
+  &
+tail -F -f -n +1 "$NCA_LAYER_LOG" &
 
 # Staring chromium.
 chromium \
-  --user-data-dir="${TEMP_DIR}" \
   --enable-features="UseOzonePlatform" \
   --ozone-platform="wayland" \
   --disable-dev-shm-usage \
@@ -57,5 +68,7 @@ chromium \
   --no-sandbox \
   --start-maximized \
   &
+
+echo "ncalayer is ready"
 
 wait

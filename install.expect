@@ -1,0 +1,16 @@
+#!/usr/bin/expect -f
+
+set dir [lindex $argv 0]
+set script [lindex $argv 1]
+
+cd "$dir"
+spawn "./$script" --nogui
+expect eof
+send "\r"
+expect eof
+send "\r"
+expect eof
+send "\r"
+expect eof
+send "N\r"
+expect eof

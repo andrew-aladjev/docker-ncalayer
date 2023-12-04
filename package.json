@@ -2,7 +2,7 @@
   "name": "@andrew-aladjev/docker-ncalayer",
   "version": "1.0.0",
   "description": "Docker ncalayer",
-  "repository": "https://gitlab.com/andrew-aladjev/docker-ncalayer.git",
+  "repository": "https://github.com/andrew-aladjev/docker-ncalayer.git",
   "author": "Andrew Aladjev <andrew.aladjev@gmail.com>",
   "license": "MIT",
   "publishConfig": {
